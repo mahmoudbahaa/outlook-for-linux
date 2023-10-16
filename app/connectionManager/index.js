@@ -114,7 +114,7 @@ class ConnectionManager {
 			return net.isOnline();
 		case 'https':
 		default:
-			// Perform an actual HTTPS request, similar to loading the Teams app.
+			// Perform an actual HTTPS request, similar to loading the Outlook app.
 			this.logger.debug('Testing network using net.request() for ' + testUrl);
 			return await isOnlineHttps(testUrl);
 		}

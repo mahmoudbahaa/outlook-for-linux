@@ -1,9 +1,9 @@
 /*
-From https://userstyles.org/styles/164545/compact-microsoft-teams-for-light-theme
+From https://userstyles.org/styles/164545/compact-microsoft-outlook-for-light-theme
 */
 
 /*
- * microsoft_teams_compact_light.css
+ * microsoft_outlook_compact_light.css
  * Generated on 2018-10-23 23:11:38
  */
 
@@ -108,7 +108,7 @@ acc-message-list-focusable
     overflow:visible !important;
 }
 
-/* same for threads in teams chat */
+/* same for threads in outlook chat */
 .message-list-common:not(.chat-style) .conversation-reply .ts-message-thread-body.align-item-left
 {
     overflow:visible !important;
@@ -147,7 +147,7 @@ thread .ts-message .merge-bubble .message-actions-container,
 /**** compact.css ****/
 
 /*   Compact the height of lines by hiding the names/timestamps 
-    (This style also applies to the "teams" chats, but in this case
+    (This style also applies to the "outlook" chats, but in this case
      it breaks things in threads were alignment/colors are different
      and visual result is not very clean. )
 */
@@ -190,7 +190,7 @@ thread .ts-message .merge-bubble .message-actions-container,
 /*** Name of the poster, timestamp: shown (above) on hover ***/
 
 
-/** Teams thread **/
+/** Outlook thread **/
 
 /* 1st thread message  */
 .message-list-common:not(.chat-style) .conversation-start .ts-message-thread-body:hover .message-body-top-row,
