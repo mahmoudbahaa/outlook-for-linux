@@ -10,8 +10,8 @@ class Settings {
 	init(config, ipcRenderer) {
 		_Settings_config.set(this, config);
 		_Settings_ipcRenderer.set(this, ipcRenderer);
-		this.ipcRenderer.on('get-teams-settings', retrieve);
-		this.ipcRenderer.on('set-teams-settings', restore);
+		this.ipcRenderer.on('get-outlook-settings', retrieve);
+		this.ipcRenderer.on('set-outlook-settings', restore);
 	}
 
 	/**
@@ -42,7 +42,7 @@ async function retrieve(event) {
 	settings.devices.camera = getDeviceLabelFromId(inst.controller, settings.devices.camera, 1);
 	settings.devices.microphone = getDeviceLabelFromId(inst.controller, settings.devices.microphone, 2);
 	settings.devices.speaker = getDeviceLabelFromId(inst.controller, settings.devices.speaker, 3);
-	event.sender.send('get-teams-settings', settings);
+	event.sender.send('get-outlook-settings', settings);
 }
 
 function getDeviceLabelFromId(controller, id, kind) {
@@ -62,7 +62,7 @@ async function restore(event, ...args) {
 	args[0].devices.microphone = getDeviceIdFromLabel(inst.controller,args[0].devices.microphone,2);
 	args[0].devices.speaker = getDeviceIdFromLabel(inst.controller,args[0].devices.speaker,3);
 	inst.controller.callingService._deviceManagerService.deviceManager.selectDevices(args[0].devices);
-	event.sender.send('set-teams-settings', true);
+	event.sender.send('set-outlook-settings', true);
 }
 
 function getDeviceIdFromLabel(controller, label, kind) {

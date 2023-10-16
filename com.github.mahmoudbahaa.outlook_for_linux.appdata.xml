@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-	<id>com.github.IsmaelMartinez.teams_for_linux</id>
+	<id>com.github.mahmoudbahaa.outlook_for_linux</id>
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>GPL-3.0</project_license>
-	<name>teams-for-linux</name>
-	<summary>Unofficial Microsoft Teams client for Linux using Electron</summary>
+	<name>outlook-for-linux</name>
+	<summary>Unofficial Microsoft Outlook client for Linux using Electron</summary>
 	<description>
-		<p>Unofficial Microsoft Teams client for Linux using Electron.</p>
+		<p>Unofficial Microsoft Outlook client for Linux using Electron.</p>
 		<p>It uses the Web App and wraps it as a standalone application using Electron.</p>
 	</description>
-	<url type="homepage">https://github.com/IsmaelMartinez/teams-for-linux</url>
-	<url type="help">https://github.com/IsmaelMartinez/teams-for-linux/blob/develop/KNOWN_ISSUES.md</url>
-	<url type="bugtracker">https://github.com/IsmaelMartinez/teams-for-linux/issues</url>
-	<launchable type="desktop-id">com.github.IsmaelMartinez.teams_for_linux.desktop</launchable>
+	<url type="homepage">https://github.com/mahmoudbahaa/outlook-for-linux</url>
+	<url type="help">https://github.com/mahmoudbahaa/outlook-for-linux/blob/develop/KNOWN_ISSUES.md</url>
+	<url type="bugtracker">https://github.com/mahmoudbahaa/outlook-for-linux/issues</url>
+	<launchable type="desktop-id">com.github.mahmoudbahaa.outlook_for_linux.desktop</launchable>
 	<releases>
 		<release version="1.3.13" date="2023-09-29">
 			<description>
@@ -218,7 +218,7 @@
 		<release version="1.0.92" date="2023-05-18">
 			<description>
 				<ul>
-					<li>Fix: External links are not opened correctly when they point to a Teams channel</li>
+					<li>Fix: External links are not opened correctly when they point to a Outlook channel</li>
 				</ul>
 			</description>
 		</release>
@@ -234,7 +234,7 @@
 				<ul>
 					<li>New: Now custom background images can be downloaded from a remote server</li>
 					<li>New: Command line parameter --customBGServiceIgnoreMSDefaults to ignore Microsoft provided images</li>
-					<li>New: Custom background service 'config.json' need not have prefix '/teams-for-linux/custom-bg/' for 'src' and 'thumb_src'</li>
+					<li>New: Custom background service 'config.json' need not have prefix '/outlook-for-linux/custom-bg/' for 'src' and 'thumb_src'</li>
 				</ul>
 			</description>
 		</release>
@@ -301,7 +301,7 @@
 		<release version="1.0.71" date="2023-04-23">
 			<description>
 				<ul>
-					<li>Fix: Teams gets unloaded after suspend</li>
+					<li>Fix: Outlook gets unloaded after suspend</li>
 				</ul>
 			</description>
 		</release>
@@ -323,7 +323,7 @@
 			<description>
 				<ul>
 					<li>New: Disable/Enable Notification Sound if not Available with --disableNotificationSoundIfNotAvailable flag</li>
-					<li>Fix: Teams gets unloaded after suspend</li>
+					<li>Fix: Outlook gets unloaded after suspend</li>
 					<li>Minor code optimization</li>
 				</ul>
 			</description>
@@ -450,7 +450,7 @@
 		<release version="1.0.42" date="2022-10-08">
 			<description>
 				<ul>
-					<li>Fix: The interstitial page of "Open Teams in Browser" / "Download Linux Client" / "Open in Teams App" opens when the app is started. By @breunigs</li>
+					<li>Fix: The interstitial page of "Open Outlook in Browser" / "Download Linux Client" / "Open in Outlook App" opens when the app is started. By @breunigs</li>
 				</ul>
 			</description>
 		</release>
@@ -553,7 +553,7 @@
 		<release version="1.0.27" date="2022-08-10">
 			<description>
 				<ul>
-					<li>Fixed: Cannot start teams-for-linux again after quit</li>
+					<li>Fixed: Cannot start outlook-for-linux again after quit</li>
 				</ul>
 			</description>
 		</release>
@@ -734,7 +734,7 @@
 					<li>Add flatpak to configuration directory list (#232) (afbb725) Thanks to @agates</li>
 					<li>Fix #208. Increasing the electron-builder (#231) (555e364)</li>
 					<li>Fix #221: updating readme with a link to AppImageLauncher (#226) (4fce0df) Thanks to @orange-buffalo</li>
-					<li>Fix #171. Can't open Microsoft Teams - blank screen (#218) (f0242d2) Thanks to @inglor and @basaas</li>
+					<li>Fix #171. Can't open Microsoft Outlook - blank screen (#218) (f0242d2) Thanks to @inglor and @basaas</li>
 					<li>Fix #204. Updating default user agent string (#217) (952c55a) Thanks to @whofferbert</li>
 					<li>Feature #185 Adding the ability to toogle fullscreen f11 (#216) (adeec1d) Thanks to @rt3norio</li>
 					<li>Update KNOWN_ISSUES to reference cache folder (#171) (#210) (36af526) Thanks to @skyghis</li>
@@ -752,7 +752,7 @@
 				<p>Using gitflow from now on for releases (having master and develop branches) (Thanks to @julian-alarcon)</p>
 				<p>#149 Re-implementing the spellchecker to improve performance. (PR #152, #155 and #163)</p>
 				<p>#123 Is now possible as the main issue was with the spellchecker (issue #149)</p>
-				<p>#41 Teams-for-linux now also available in Flatpak! (Thanks to @gabops)</p>
+				<p>#41 Outlook-for-linux now also available in Flatpak! (Thanks to @gabops)</p>
 				<p>#99 Fixing the cursor in snap (PR #168)</p>
 				<p>#61 Improving the screen-share quality by adding a white end to the browserviews. This is a chrome issue that basically doesn't trigger then the antialiasing. Strange but it works! (PR #165)</p>
 				<p>#89 Adding the basic part for the xdg-open. This might need a few improvements as it is currently quite difficult to test. (PR #170)</p>
@@ -776,7 +776,7 @@
 			</description>
 		</release>
 	</releases>
-	<developer_name>Ismael Martinez</developer_name>
+	<developer_name>Mahmoud Bahaa</developer_name>
 	<screenshots>
 		<screenshot type="default">
 			<image type="source">https://iili.io/sUyRS9.png</image>

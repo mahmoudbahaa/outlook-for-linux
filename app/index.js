@@ -69,7 +69,7 @@ if (isMac) {
 	app.commandLine.appendSwitch('use-fake-ui-for-media-stream');
 }
 
-const protocolClient = 'msteams';
+const protocolClient = 'msoutlook';
 if (!app.isDefaultProtocolClient(protocolClient, process.execPath)) {
 	app.setAsDefaultProtocolClient(protocolClient, process.execPath);
 }
@@ -287,12 +287,12 @@ function onCustomBGServiceConfigDownloadSuccess(data) {
  * @param {{filetype: string,id: string, name: string, src: string, thumb_src: string }} cfg 
  */
 function setPath(cfg) {
-	if (!cfg.src.startsWith('/teams-for-linux/custom-bg/')) {
-		cfg.src = httpHelper.joinURLs('/teams-for-linux/custom-bg/', cfg.src);
+	if (!cfg.src.startsWith('/outlook-for-linux/custom-bg/')) {
+		cfg.src = httpHelper.joinURLs('/outlook-for-linux/custom-bg/', cfg.src);
 	}
 
-	if (!cfg.thumb_src.startsWith('/teams-for-linux/custom-bg/')) {
-		cfg.thumb_src = httpHelper.joinURLs('/teams-for-linux/custom-bg/', cfg.thumb_src);
+	if (!cfg.thumb_src.startsWith('/outlook-for-linux/custom-bg/')) {
+		cfg.thumb_src = httpHelper.joinURLs('/outlook-for-linux/custom-bg/', cfg.thumb_src);
 	}
 }
 

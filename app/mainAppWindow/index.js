@@ -170,8 +170,8 @@ function restoreWindow() {
 }
 
 function processArgs(args) {
-	var regHttps = /^https:\/\/teams.microsoft.com\/l\/(meetup-join|channel)\//g;
-	var regMS = /^msteams:\/l\/(meetup-join|channel)\//g;
+	var regHttps = /^https:\/\/outlook.microsoft.com\/l\/(meetup-join|channel)\//g;
+	var regMS = /^msoutlook:\/l\/(meetup-join|channel)\//g;
 	logger.debug('processArgs:', args);
 	for (const arg of args) {
 		if (regHttps.test(arg)) {
@@ -180,7 +180,7 @@ function processArgs(args) {
 			return arg;
 		}
 		if (regMS.test(arg)) {
-			logger.debug('A url argument received with msteams protocol');
+			logger.debug('A url argument received with msoutlook protocol');
 			window.show();
 			return config.url + arg.substring(8, arg.length);
 		}
@@ -192,8 +192,8 @@ function processArgs(args) {
  * @param {Electron.CallbackResponse} callback 
  */
 function onBeforeRequestHandler(details, callback) {
-	if (details.url.startsWith('https://statics.teams.cdn.office.net/teams-for-linux/custom-bg/')) {
-		const reqUrl = details.url.replace('https://statics.teams.cdn.office.net/teams-for-linux/custom-bg/', '');
+	if (details.url.startsWith('https://statics.outlook.cdn.office.net/outlook-for-linux/custom-bg/')) {
+		const reqUrl = details.url.replace('https://statics.outlook.cdn.office.net/outlook-for-linux/custom-bg/', '');
 		const imgUrl = getBGRedirectUrl(reqUrl);
 		logger.debug(`Forwarding '${details.url}' to '${imgUrl}'`);
 		callback({ redirectURL: imgUrl });
@@ -264,7 +264,7 @@ function onBeforeSendHeadersHandler(detail, callback) {
  * @returns {{action: 'deny'} | {action: 'allow', outlivesOpener?: boolean, overrideBrowserWindowOptions?: Electron.BrowserWindowConstructorOptions}}
  */
 function onNewWindow(details) {
-	if (details.url.startsWith('https://teams.microsoft.com/l/meetup-join')) {
+	if (details.url.startsWith('https://outlook.microsoft.com/l/meetup-join')) {
 		logger.debug('DEBUG - captured meetup-join url');
 		return { action: 'deny' };
 	} else if (details.url === 'about:blank' || details.url === 'about:blank#blocked') {
@@ -441,7 +441,7 @@ function assignEventHandlers(newWindow) {
 
 function createNewBrowserWindow(windowState) {
 	return new BrowserWindow({
-		title:'Teams for Linux',
+		title:'Outlook for Linux',
 		x: windowState.x,
 		y: windowState.y,
 
