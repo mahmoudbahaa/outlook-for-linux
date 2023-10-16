@@ -1,6 +1,6 @@
 # outlook-for-linux
 
-This is an unofficial Microsoft Outlook client. The official client for Linux from Microsoft is retired by the end of 2022 and be replaced with PWA. Read the blog [here](https://techcommunity.microsoft.com/t5/microsoft-outlook-blog/microsoft-outlook-progressive-web-app-now-available-on-linux/ba-p/3669846).
+This is an unofficial Microsoft Outlook client.
 
 Please report bugs and questions in the issues section. We will attend them as soon as possible.
 

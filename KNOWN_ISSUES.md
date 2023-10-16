@@ -14,12 +14,12 @@ Switching the userAgent with the persistence turn on sometimes have the side eff
 
 The following is a list of locations depending on your type installation:
 
-| Type of install | Location | Clean-up command |
-|:-------------:|:-------------:|:-----:|
-| Vanilla install | `~/.config/outlook-for-linux` | `rm -rf ~/.config/outlook-for-linux` |
-| snap | `~/snap/outlook-for-linux/current/.config/outlook-for-linux/` |  `rm -rf ~/snap/outlook-for-linux/current/.config/outlook-for-linux/` |
-| --user installed flatpak | `~/.var/app/com.github.IsmaelMartinez.outlook_for_linux/config/outlook-for-linux` | `rm -rf ~/.var/app/com.github.IsmaelMartinez.outlook_for_linux/config/outlook-for-linux` |
-| From source | `~/.config/Electron/` | `rm -rf ~/.config/Electron/` |
+| Type of install |                                    Location                                     | Clean-up command |
+|:-------------:|:-------------------------------------------------------------------------------:|:-----:|
+| Vanilla install |                          `~/.config/outlook-for-linux`                          | `rm -rf ~/.config/outlook-for-linux` |
+| snap |          `~/snap/outlook-for-linux/current/.config/outlook-for-linux/`          |  `rm -rf ~/snap/outlook-for-linux/current/.config/outlook-for-linux/` |
+| --user installed flatpak | `~/.var/app/com.github.mahmoudbahaa.outlook_for_linux/config/outlook-for-linux` | `rm -rf ~/.var/app/com.github.IsmaelMartinez.outlook_for_linux/config/outlook-for-linux` |
+| From source |                              `~/.config/Electron/`                              | `rm -rf ~/.config/Electron/` |
 
 ## Spellchecker not working
 
