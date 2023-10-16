@@ -190,7 +190,7 @@ function getMeetingNotificationList(workerEvents, calendarEvents) {
 
 function addEligibleCalendarEvents(calendarEvents, meetingId, notificationList) {
 	for (const ce of calendarEvents) {
-		if (JSON.parse(ce.skypeTeamsData).cid === meetingId) {
+		if (JSON.parse(ce.skypeOutlookData).cid === meetingId) {
 			notificationList.push(ce);
 			break;
 		}
@@ -207,7 +207,7 @@ function assignActivitiesCountUpdateHandler(controller) {
 	controller.chatListService.safeSubscribe(
 		controller.$scope,
 		() => onActivitiesCountUpdated(controller),
-		window.teamspace.services.ChatListServiceEvents.EventType_UnreadCount);
+		window.outlookpace.services.ChatListServiceEvents.EventType_UnreadCount);
 	onActivitiesCountUpdated(controller);
 }
 
@@ -282,7 +282,7 @@ function callMeetingStartedEventHandlers(handlers, e) {
 async function onMyStatusChanged(controller, data) {
 	const handlers = getEventHandlers('my-status-changed');
 	for (const handler of handlers) {
-		handler.handler({ data: data, isInactive: window.teamspace.services.ApplicationState[controller.appStateService.current] === 'Inactive' || window.teamspace.services.ApplicationState[controller.appStateService.current] === 'LongInactive' });
+		handler.handler({ data: data, isInactive: window.outlookpace.services.ApplicationState[controller.appStateService.current] === 'Inactive' || window.outlookpace.services.ApplicationState[controller.appStateService.current] === 'LongInactive' });
 	}
 }
 
