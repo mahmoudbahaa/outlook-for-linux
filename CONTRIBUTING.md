@@ -65,13 +65,13 @@ To install the snap file using the generated file use this command.
 
 ```bash
 cd dist
-sudo snap install teams-for-linux_VERSION_amd64.snap --dangerous
+sudo snap install outlook-for-linux_VERSION_amd64.snap --dangerous
 ```
 
 #### Install using snap from store
 
 ```bash
-sudo snap install teams-for-linux
+sudo snap install outlook-for-linux
 ```
 
 ## Version number

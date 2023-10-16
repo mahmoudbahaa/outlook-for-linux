@@ -5,11 +5,11 @@ exports = module.exports = (app) => ({
 	submenu: [
 		{
 			label: 'Online Documentation',
-			click: () => shell.openExternal('https://support.office.com/en-us/teams?omkt=en-001'),
+			click: () => shell.openExternal('https://support.office.com/en-us/outlook?omkt=en-001'),
 		},
 		{
 			label: 'Github Project',
-			click: () => shell.openExternal('https://github.com/IsmaelMartinez/teams-for-linux'),
+			click: () => shell.openExternal('https://github.com/mahmoudbahaa/outlook-for-linux'),
 		},
 		{type: 'separator'},
 		{

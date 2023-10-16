@@ -14,12 +14,12 @@ Switching the userAgent with the persistence turn on sometimes have the side eff
 
 The following is a list of locations depending on your type installation:
 
-| Type of install | Location | Clean-up command |
-|:-------------:|:-------------:|:-----:|
-| Vanilla install | `~/.config/teams-for-linux` | `rm -rf ~/.config/teams-for-linux` |
-| snap | `~/snap/teams-for-linux/current/.config/teams-for-linux/` |  `rm -rf ~/snap/teams-for-linux/current/.config/teams-for-linux/` |
-| --user installed flatpak | `~/.var/app/com.github.IsmaelMartinez.teams_for_linux/config/teams-for-linux` | `rm -rf ~/.var/app/com.github.IsmaelMartinez.teams_for_linux/config/teams-for-linux` |
-| From source | `~/.config/Electron/` | `rm -rf ~/.config/Electron/` |
+| Type of install |                                    Location                                     | Clean-up command |
+|:-------------:|:-------------------------------------------------------------------------------:|:-----:|
+| Vanilla install |                          `~/.config/outlook-for-linux`                          | `rm -rf ~/.config/outlook-for-linux` |
+| snap |          `~/snap/outlook-for-linux/current/.config/outlook-for-linux/`          |  `rm -rf ~/snap/outlook-for-linux/current/.config/outlook-for-linux/` |
+| --user installed flatpak | `~/.var/app/com.github.mahmoudbahaa.outlook_for_linux/config/outlook-for-linux` | `rm -rf ~/.var/app/com.github.IsmaelMartinez.outlook_for_linux/config/outlook-for-linux` |
+| From source |                              `~/.config/Electron/`                              | `rm -rf ~/.config/Electron/` |
 
 ## Spellchecker not working
 
@@ -37,21 +37,21 @@ Some notifications daemons in linux don't support the implementation that Micros
 
 ## Blank page
 
-Some users have reported a blank page on login (with the title `Microsoft Teams - initializing`).
+Some users have reported a blank page on login (with the title `Microsoft Outlook - initializing`).
 
 The following workarounds tend to solve the issue:
 
-*    Right click on the Microsoft Teams icon tray and click on Refresh. (Ctrl+R)
+*    Right click on the Microsoft Outlook icon tray and click on Refresh. (Ctrl+R)
 
 If the above doesn't work:
 
 *    Close the application and delete the application cache folder
 
-  *    `.config/teams-for-linux/Partitions/teams-4-linux/Application Cache`
+  *    `.config/outlook-for-linux/Partitions/outlook-4-linux/Application Cache`
 
-  *    for Snap installation, `snap/teams-for-linux/current/.config/teams-for-linux/Partitions/teams-4-linux/Application Cache`.
+  *    for Snap installation, `snap/outlook-for-linux/current/.config/outlook-for-linux/Partitions/outlook-4-linux/Application Cache`.
 
-  *    for flatpack, `~/.var/app/com.github.IsmaelMartinez.teams_for_linux/config/teams-for-linux/Partitions/teams-4-linux/Application\ Cache/`
+  *    for flatpack, `~/.var/app/com.github.IsmaelMartinez.outlook_for_linux/config/outlook-for-linux/Partitions/outlook-4-linux/Application\ Cache/`
 
   >  Check the config locations to find other installations location
 

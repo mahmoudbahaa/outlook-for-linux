@@ -30,7 +30,7 @@ jobs:
         run: yarn --link-duplicates --pure-lockfile
 
       - name: Release
-        if: contains(github.ref, 'develop')
+        if: contains(github.ref, 'develop-outlook')
         run: yarn dist:linux:snap --publish always
 
   snap-armv7l:
@@ -55,5 +55,5 @@ jobs:
         run: yarn --link-duplicates --pure-lockfile
 
       - name: Release
-        if: contains(github.ref, 'develop')
+        if: contains(github.ref, 'develop-outlook')
         run: yarn dist:linux:snap:armv7l --publish always

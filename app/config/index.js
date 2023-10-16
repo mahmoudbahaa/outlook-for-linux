@@ -27,7 +27,7 @@ function argv(configPath) {
 			},
 			appIcon: {
 				default: '',
-				describe: 'Teams app icon to show in the tray',
+				describe: 'Outlook app icon to show in the tray',
 				type: 'string'
 			},
 			appIconType: {
@@ -52,7 +52,7 @@ function argv(configPath) {
 				type: 'string'
 			},
 			appTitle: {
-				default: 'Microsoft Teams',
+				default: 'Microsoft Outlook',
 				describe: 'A text to be suffixed with page title',
 				type: 'string'
 			},
@@ -162,7 +162,7 @@ function argv(configPath) {
 				type: 'boolean'
 			},
 			partition: {
-				default: 'persist:teams-4-linux',
+				default: 'persist:outlook-4-linux',
 				describe: 'BrowserWindow webpreferences partition',
 				type: 'string'
 			},
@@ -199,8 +199,8 @@ function argv(configPath) {
 				type: 'array'
 			},
 			url: {
-				default: 'https://teams.microsoft.com/',
-				describe: 'Microsoft Teams URL',
+				default: 'https://outlook.office.com/',
+				describe: 'Microsoft Outlook URL',
 				type: 'string'
 			},
 			webDebug: {

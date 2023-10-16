@@ -72,7 +72,7 @@ class Menus {
 
 	about() {
 		const appInfo = [];
-		appInfo.push(`teams-for-linux@${app.getVersion()}\n`);
+		appInfo.push(`outlook-for-linux@${app.getVersion()}\n`);
 		for (const prop in process.versions) {
 			if (prop === 'node' || prop === 'v8' || prop === 'electron' || prop === 'chrome') {
 				appInfo.push(`${prop}: ${process.versions[prop]}`);
@@ -147,18 +147,18 @@ class Menus {
 	}
 
 	saveSettings() {
-		ipcMain.once('get-teams-settings', saveSettingsInternal);
-		this.window.webContents.send('get-teams-settings');
+		ipcMain.once('get-outlook-settings', saveSettingsInternal);
+		this.window.webContents.send('get-outlook-settings');
 	}
 
 	restoreSettings() {
-		ipcMain.once('set-teams-settings', restoreSettingsInternal);
-		this.window.webContents.send('set-teams-settings', JSON.parse(fs.readFileSync(path.join(app.getPath('userData'), 'teams_settings.json'))));
+		ipcMain.once('set-outlook-settings', restoreSettingsInternal);
+		this.window.webContents.send('set-outlook-settings', JSON.parse(fs.readFileSync(path.join(app.getPath('userData'), 'outlook_settings.json'))));
 	}
 }
 
 function saveSettingsInternal(event, arg) {
-	fs.writeFileSync(path.join(app.getPath('userData'), 'teams_settings.json'), JSON.stringify(arg));
+	fs.writeFileSync(path.join(app.getPath('userData'), 'outlook_settings.json'), JSON.stringify(arg));
 	dialog.showMessageBoxSync(this.window, {
 		message: 'Settings have been saved successfully!',
 		title: 'Save settings',
