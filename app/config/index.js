@@ -199,7 +199,7 @@ function argv(configPath) {
 				type: 'array'
 			},
 			url: {
-				default: 'https://outlook.microsoft.com/',
+				default: 'https://outlook.office.com/',
 				describe: 'Microsoft Outlook URL',
 				type: 'string'
 			},
