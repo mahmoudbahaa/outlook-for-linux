@@ -110,18 +110,6 @@ function applySpellCheckerConfiguration(languages, window) {
 	}
 }
 
-function onDidFinishLoad() {
-	logger.debug('did-finish-load');
-	window.webContents.executeJavaScript(`
-			openBrowserButton = document.querySelector('[data-tid=joinOnWeb]');
-			openBrowserButton && openBrowserButton.click();
-		`);
-	window.webContents.executeJavaScript(`
-			tryAgainLink = document.getElementById('try-again-link');
-			tryAgainLink && tryAgainLink.click()
-		`);
-}
-
 /**
  * @param {Electron.HandlerDetails} details 
  * @returns {{action: 'deny'} | {action: 'allow', outlivesOpener?: boolean, overrideBrowserWindowOptions?: Electron.BrowserWindowConstructorOptions}}
@@ -150,7 +138,6 @@ function addEventHandlers() {
 	window.on('page-title-updated', onPageTitleUpdated);
 	window.webContents.setWindowOpenHandler(onNewWindow);
 	login.handleLoginDialogTry(window);
-	window.webContents.on('did-finish-load', onDidFinishLoad);
 	window.on('closed', onWindowClosed);
 	window.webContents.addListener('before-input-event', onBeforeInput);
 }
