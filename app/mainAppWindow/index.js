@@ -68,14 +68,6 @@ function onSpellCheckerLanguageChanged(languages) {
 	appConfig.legacyConfigStore.set('spellCheckerLanguages', languages);
 }
 
-exports.onAppSecondInstance = function onAppSecondInstance(event) {
-	logger.debug('second-instance started');
-	if (window) {
-		event.preventDefault();
-		restoreWindow();
-	}
-};
-
 /**
  * Applies the configuration passed as arguments when executing the app.
  * @param config Configuration object.
@@ -131,20 +123,6 @@ function onDidFinishLoad() {
 			tryAgainLink && tryAgainLink.click()
 		`);
 	customCSS.onDidFinishLoad(window.webContents, config);
-}
-
-function restoreWindow() {
-	// If minimized, restore.
-	if (window.isMinimized()) {
-		window.restore();
-	}
-
-	// If closed to tray, show.
-	else if (!window.isVisible()) {
-		window.show();
-	}
-
-	window.focus();
 }
 
 /**

@@ -3,14 +3,11 @@
 (function () {
 	console.log('Initializing Browser');
 	const { ipcRenderer } = require('electron');
-	const ActivityManager = require('./notifications/activityManager');
 
 	let config;
 	ipcRenderer.invoke('getConfig').then(mainConfig => {
 		config = mainConfig;
 		initializeModules(config, ipcRenderer);
-
-		new ActivityManager(ipcRenderer, config).start();
 
 		document.addEventListener('DOMContentLoaded', () => {
 			modifyAngularSettingsWithTimeout();

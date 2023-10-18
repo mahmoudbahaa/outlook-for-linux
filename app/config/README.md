@@ -30,10 +30,8 @@ Here is the list of available arguments and its usage:
 | config | config file location | ~/.config/outlook-for-linux/config.json |
 | defaultURLHandler | Default application to be used to open the HTTP URLs |  |
 | disableAutogain | A flag indicates whether to disable mic auto gain or not | false |
-| disableMeetingNotifications | Whether to disable meeting notifications or not | false |
 | disableNotifications | A flag to disable all notifications | false |
 | disableNotificationSound | Disable chat/meeting start notification sound | false |
-| disableNotificationSoundIfNotAvailable | Disable chat/meeting start notification sound if status is not Available (e.g. busy, in a call) | true |
 | disableNotificationWindowFlash | A flag indicates whether to disable window flashing when there is a notification | false |
 | help  | show the available commands | false |
 | onlineCheckMethod | Type of network test for checking online status, can be: https, dns, native, none | https |

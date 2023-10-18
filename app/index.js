@@ -22,13 +22,7 @@ const logger = new LucidLog({
 const notificationSounds = [{
 	type: 'new-message',
 	file: path.join(config.appPath, 'assets/sounds/new_message.wav')
-},
-{
-	type: 'meeting-started',
-	file: path.join(config.appPath, 'assets/sounds/meeting_started.wav')
 }];
-
-let userStatus = -1;
 
 // Notification sound player
 /**
@@ -78,7 +72,6 @@ if (!gotTheLock) {
 	logger.info('App already running');
 	app.quit();
 } else {
-	app.on('second-instance', mainAppWindow.onAppSecondInstance);
 	app.on('ready', handleAppReady);
 	app.on('quit', () => logger.debug('quit'));
 	app.on('render-process-gone', onRenderProcessGone);
@@ -89,7 +82,6 @@ if (!gotTheLock) {
 	ipcMain.handle('saveZoomLevel', handleSaveZoomLevel);
 	ipcMain.handle('desktopCapturerGetSources', (event, opts) => desktopCapturer.getSources(opts));
 	ipcMain.handle('play-notification-sound', playNotificationSound);
-	ipcMain.handle('user-status-changed', userStatusChangedHandler);
 	ipcMain.handle('set-badge-count', setBadgeCountHandler);
 }
 
@@ -99,11 +91,6 @@ async function playNotificationSound(event, options) {
 	// Player failed to load or notification sound disabled in config
 	if (!player || config.disableNotificationSound) {
 		logger.debug('Notification sounds are disabled');
-		return;
-	}
-	// Notification sound disabled if not available set in config and user status is not "Available" (or is unknown)
-	if (config.disableNotificationSoundIfNotAvailable && userStatus !== 1 && userStatus !== -1) {
-		logger.debug('Notification sounds are disabled when user is not active');
 		return;
 	}
 	const sound = notificationSounds.filter(ns => {
@@ -200,17 +187,6 @@ async function requestMediaAccess() {
 		const status = await systemPreferences.askForMediaAccess(permission);
 		logger.debug(`mac permission ${permission} asked current status ${status}`);
 	});
-}
-
-/**
- * Handle user-status-changed message
- * 
- * @param {*} event 
- * @param {*} options 
- */
-async function userStatusChangedHandler(event, options) {
-	userStatus = options.data.status;
-	logger.debug(`User status changed to '${userStatus}'`);
 }
 
 /**
