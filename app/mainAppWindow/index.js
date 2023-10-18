@@ -1,10 +1,9 @@
 require('@electron/remote/main').initialize();
-const { shell, BrowserWindow, ipcMain, app, session, nativeTheme, dialog } = require('electron');
+const { shell, BrowserWindow, app, session, nativeTheme, dialog } = require('electron');
 const isDarkMode = nativeTheme.shouldUseDarkColors;
 const windowStateKeeper = require('electron-window-state');
 const login = require('../login');
 const Menus = require('../menus');
-const { StreamSelector } = require('../streamSelector');
 const { LucidLog } = require('lucid-log');
 const { SpellCheckProvider } = require('../spellCheckProvider');
 const exec = require('child_process').exec;
@@ -255,7 +254,6 @@ async function createWindow() {
 	// Create the window
 	const window = createNewBrowserWindow(windowState);
 	require('@electron/remote/main').enable(window.webContents);
-	assignEventHandlers();
 
 	windowState.manage(window);
 
@@ -264,11 +262,6 @@ async function createWindow() {
 	};
 
 	return window;
-}
-
-function assignEventHandlers() {
-	ipcMain.on('select-source', assignSelectSourceHandler());
-	ipcMain.handle('select-source-wayland', assignSelectSourceHandlerWayland());
 }
 
 function createNewBrowserWindow(windowState) {
@@ -294,32 +287,4 @@ function createNewBrowserWindow(windowState) {
 			spellcheck: true
 		},
 	});
-}
-
-function assignSelectSourceHandlerWayland() {
-	return async () => {
-		if (config.bypassWaylandSourceSelection) {
-			return 'default';
-		}
-
-		const actionValues = ['monitor', 'window', 'none'];
-		const action = await dialog.showMessageBox(window, {
-			type: 'question',
-			buttons: ['Monitor', 'Window', 'Cancel'],
-			title: 'Type of source',
-			normalizeAccessKeys: true,
-			defaultId: 0,
-			cancelId: 2,
-			message: 'Please choose the type of source (Monitor/Window)'
-		});
-		return actionValues[action.response];
-	};
-}
-function assignSelectSourceHandler() {
-	return event => {
-		const streamSelector = new StreamSelector(window);
-		streamSelector.show((source) => {
-			event.reply('select-source', source);
-		});
-	};
 }

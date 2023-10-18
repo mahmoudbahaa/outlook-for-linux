@@ -20,11 +20,6 @@ function argv(configPath) {
 		.env(true)
 		.config(configFile)
 		.options({
-			appActiveCheckInterval: {
-				default: 2,
-				describe: 'A numeric value in seconds as poll interval to check if the system is active from being idle',
-				type: 'number'
-			},
 			appIcon: {
 				default: '',
 				describe: 'Outlook app icon to show in the tray',
@@ -35,16 +30,6 @@ function argv(configPath) {
 				describe: 'Type of tray icon to be used',
 				type: 'string',
 				choices: ['default', 'light', 'dark']
-			},
-			appIdleTimeout: {
-				default: 300,
-				describe: 'A numeric value in seconds as duration before app considers the system as idle',
-				type: 'number'
-			},
-			appIdleTimeoutCheckInterval: {
-				default: 10,
-				describe: 'A numeric value in seconds as poll interval to check if the appIdleTimeout is reached',
-				type: 'number'
 			},
 			appLogLevels: {
 				default: 'error,warn',
@@ -60,11 +45,6 @@ function argv(configPath) {
 				default: '*',
 				describe: 'Set auth-server-whitelist value',
 				type: 'string'
-			},
-			bypassWaylandSourceSelection: {
-				default: false,
-				describe: 'A flag indicates whether to bypass wayland source selection dialog when screen a share request is received',
-				type: 'boolean'
 			},
 			chromeUserAgent: {
 				default: `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${process.versions.chrome} Safari/537.36`,

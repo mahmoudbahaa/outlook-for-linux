@@ -84,7 +84,6 @@
 function initializeModules(config, ipcRenderer) {
 	require('./tools/zoom').init(config);
 	require('./tools/shortcuts').init(config);
-	require('./tools/chromeApi')(config);
 	require('./tools/settings').init(config, ipcRenderer);
 	// require('../notifications/mailObserver').observeUnreadInit();
 }

@@ -10,15 +10,11 @@ Here is the list of available arguments and its usage:
 
 | Option | Usage | Default Value |
 |:-:|:-:|:-:|
-| appActiveCheckInterval | A numeric value in seconds as poll interval to check if the system is active from being idle | 2 |
 | appIcon | Outlook app icon to show in the tray | |
 | appIconType | Type of tray icon to be used default/light/dark | default |
-| appIdleTimeout | A numeric value in seconds as duration before app considers the system as idle | 300 |
-| appIdleTimeoutCheckInterval | A numeric value in seconds as poll interval to check if the appIdleTimeout is reached | 10 |
 | appLogLevels | Comma separated list of log levels (error,warn,info,debug) | error,warn |
 | appTitle |  A text to be suffixed with page title | Microsoft Outlook |
 | authServerWhitelist | set auth-server-whitelist value | * |
-| bypassWaylandSourceSelection | A flag indicates whether to bypass wayland source selection dialog when screen a share request is received | false |
 | chromeUserAgent | user agent string for chrome | Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3831.6 Safari/537.36 |
 | customCACertsFingerprints | custom CA Certs Fingerprints to allow SSL unrecognized signer or self signed certificate (see below) | [] |
 | customUserDir | Custom User Directory so that you can have multiple profiles | |

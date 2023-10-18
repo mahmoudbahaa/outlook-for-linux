@@ -47,10 +47,7 @@ app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling');
 app.commandLine.appendSwitch('enable-ntlm-v2', config.ntlmV2enabled);
 app.commandLine.appendSwitch('try-supported-channel-layouts');
 
-if (isMac) {
-	requestMediaAccess();
-
-} else if (process.env.XDG_SESSION_TYPE === 'wayland') {
+if (process.env.XDG_SESSION_TYPE === 'wayland') {
 	logger.info('Running under Wayland, switching to PipeWire...');
 
 	const features = app.commandLine.hasSwitch('enable-features') ? app.commandLine.getSwitchValue('enable-features').split(',') : [];
@@ -58,7 +55,6 @@ if (isMac) {
 		features.push('WebRTCPipeWireCapturer');
 
 	app.commandLine.appendSwitch('enable-features', features.join(','));
-	app.commandLine.appendSwitch('use-fake-ui-for-media-stream');
 }
 
 const protocolClient = 'msoutlook';
@@ -180,13 +176,6 @@ function handleCertificateError() {
 		config: config
 	};
 	certificateModule.onAppCertificateError(arg, logger);
-}
-
-async function requestMediaAccess() {
-	['camera', 'microphone', 'screen'].map(async (permission) => {
-		const status = await systemPreferences.askForMediaAccess(permission);
-		logger.debug(`mac permission ${permission} asked current status ${status}`);
-	});
 }
 
 /**
