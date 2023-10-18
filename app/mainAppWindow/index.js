@@ -3,7 +3,6 @@ const { shell, BrowserWindow, ipcMain, app, session, nativeTheme, dialog } = req
 const isDarkMode = nativeTheme.shouldUseDarkColors;
 const windowStateKeeper = require('electron-window-state');
 const login = require('../login');
-const customCSS = require('../customCSS');
 const Menus = require('../menus');
 const { StreamSelector } = require('../streamSelector');
 const { LucidLog } = require('lucid-log');
@@ -122,7 +121,6 @@ function onDidFinishLoad() {
 			tryAgainLink = document.getElementById('try-again-link');
 			tryAgainLink && tryAgainLink.click()
 		`);
-	customCSS.onDidFinishLoad(window.webContents, config);
 }
 
 /**

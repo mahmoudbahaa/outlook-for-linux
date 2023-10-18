@@ -21,18 +21,14 @@ Here is the list of available arguments and its usage:
 | bypassWaylandSourceSelection | A flag indicates whether to bypass wayland source selection dialog when screen a share request is received | false |
 | chromeUserAgent | user agent string for chrome | Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3831.6 Safari/537.36 |
 | customCACertsFingerprints | custom CA Certs Fingerprints to allow SSL unrecognized signer or self signed certificate (see below) | [] |
-| customCSSName | Custom CSS name for the packaged available css files. Currently those are: "compactDark", "compactLight", "tweaks", "condensedDark" and "condensedLight" | |
-| customCSSLocation | Location for custom CSS styles | |
 | customUserDir | Custom User Directory so that you can have multiple profiles | |
 | clearStorage | Whether to clear the storage before creating the window or not | false |
 | clientCertPath clientCertPassword | custom Client Certs for corporate authentication (certificate must be in pkcs12 format) | [] |
 | closeAppOnCross | Close the app when clicking the close (X) cross | false |
 | config | config file location | ~/.config/outlook-for-linux/config.json |
 | defaultURLHandler | Default application to be used to open the HTTP URLs |  |
-| disableAutogain | A flag indicates whether to disable mic auto gain or not | false |
 | disableNotifications | A flag to disable all notifications | false |
 | disableNotificationSound | Disable chat/meeting start notification sound | false |
-| disableNotificationWindowFlash | A flag indicates whether to disable window flashing when there is a notification | false |
 | help  | show the available commands | false |
 | onlineCheckMethod | Type of network test for checking online status, can be: https, dns, native, none | https |
 | partition | [BrowserWindow](https://electronjs.org/docs/api/browser-window) webpreferences partition | persist:outlook-4-linux |
@@ -40,7 +36,6 @@ Here is the list of available arguments and its usage:
 | menubar | A value controls the menu bar behaviour (auto/visible/hidden) | auto |
 | minimized | Start the application minimized | false |
 | ntlmV2enabled | set enable-ntlm-v2 value | true |
-| screenLockInhibitionMethod | Screen lock inhibition method to be used (Electron/WakeLockSentinel) | Electron |
 | spellCheckerLanguages | Language codes to use with Electron\'s spell checker (experimental) | [] |
 | url | url to open | [https://outlook.microsoft.com/](https://outlook.microsoft.com/) |
 | version | show the version number | false |

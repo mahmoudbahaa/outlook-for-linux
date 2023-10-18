@@ -76,16 +76,6 @@ function argv(configPath) {
 				describe: 'Array of custom CA Certs Fingerprints to allow SSL unrecognized signer or self signed certificate',
 				type: 'array'
 			},
-			customCSSName: {
-				default: '',
-				describe: 'custom CSS name for the packaged available css files. Currently those are: "compactDark", "compactLight", "tweaks", "condensedDark" and "condensedLight" ',
-				type: 'string'
-			},
-			customCSSLocation: {
-				default: '',
-				describe: 'custom CSS styles file location',
-				type: 'string'
-			},
 			customUserDir: {
 				default: null,
 				describe: 'Custom User Directory so that you can have multiple profiles',
@@ -115,11 +105,6 @@ function argv(configPath) {
 				default: '',
 				describe: 'Default application to be used to open the HTTP URLs',
 				type: 'string'
-			},	 
-			disableAutogain: {
-				default: false,
-				describe: 'A flag indicates whether to disable mic auto gain or not',
-				type: 'boolean'
 			},
 			disableNotifications: {
 				default: false,
@@ -129,11 +114,6 @@ function argv(configPath) {
 			disableNotificationSound: {
 				default: false,
 				describe: 'Disable chat/meeting start notification sound',
-				type: 'boolean'
-			},
-			disableNotificationWindowFlash: {
-				default: false,
-				describe: 'A flag indicates whether to disable window flashing when there is a notification',
 				type: 'boolean'
 			},
 			partition: {

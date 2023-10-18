@@ -1,5 +1,4 @@
 const { ipcRenderer } = require('electron');
-const disableAutogain = require('./disableAutogain');
 // In order to have this functionality working, contextIsolation should be disabled.
 // In new versions of electron, contextIsolation is set to true by default.
 // We should explicitly set it to false when creating BrowserWindow
@@ -13,10 +12,6 @@ function init(config) {
 			navigator.mediaDevices.getDisplayMedia = customGetDisplayMediaWayland;
 		} else {
 			MediaDevices.prototype.getDisplayMedia = customGetDisplayMediaX11;
-		}
-
-		if (config.disableAutogain) {
-			disableAutogain();
 		}
 	});
 }
