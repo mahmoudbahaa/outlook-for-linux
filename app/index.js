@@ -1,4 +1,4 @@
-const { app, ipcMain, desktopCapturer, systemPreferences, powerMonitor } = require('electron');
+const { app, ipcMain, desktopCapturer, systemPreferences } = require('electron');
 const path = require('path');
 const { LucidLog } = require('lucid-log');
 
@@ -85,8 +85,6 @@ if (!gotTheLock) {
 	app.on('will-quit', () => logger.debug('will-quit'));
 	app.on('certificate-error', handleCertificateError);
 	ipcMain.handle('getConfig', handleGetConfig);
-	ipcMain.handle('getSystemIdleTime', handleGetSystemIdleTime);
-	ipcMain.handle('getSystemIdleState', handleGetSystemIdleState);
 	ipcMain.handle('getZoomLevel', handleGetZoomLevel);
 	ipcMain.handle('saveZoomLevel', handleSaveZoomLevel);
 	ipcMain.handle('desktopCapturerGetSources', (event, opts) => desktopCapturer.getSources(opts));
@@ -145,16 +143,6 @@ function handleAppReady() {
 
 async function handleGetConfig() {
 	return config;
-}
-
-async function handleGetSystemIdleTime() {
-	return powerMonitor.getSystemIdleTime();
-}
-
-async function handleGetSystemIdleState() {
-	const idleState = powerMonitor.getSystemIdleState(config.appIdleTimeout);
-	logger.debug(`GetSystemIdleState => IdleTimeout: ${config.appIdleTimeout}s, IdleTimeoutPollInterval: ${config.appIdleTimeoutCheckInterval}s, ActiveCheckPollInterval: ${config.appActiveCheckInterval}s, IdleTime: ${powerMonitor.getSystemIdleTime()}s, IdleState: '${idleState}'`);
-	return idleState;
 }
 
 async function handleGetZoomLevel(_, name) {
