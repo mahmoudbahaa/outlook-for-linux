@@ -1,5 +1,7 @@
 /* global angular */
+
 (function () {
+	console.log('Initializing Browser');
 	const { ipcRenderer } = require('electron');
 	const ActivityManager = require('./notifications/activityManager');
 
@@ -87,6 +89,6 @@ function initializeModules(config, ipcRenderer) {
 	require('./tools/shortcuts').init(config);
 	require('./tools/chromeApi')(config);
 	require('./tools/settings').init(config, ipcRenderer);
-	require('./tools/customBackgrounds')(config, ipcRenderer);
+	// require('../notifications/mailObserver').observeUnreadInit();
 }
 

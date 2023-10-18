@@ -35,16 +35,15 @@ class ConnectionManager {
 	}
 
 	/**
-	 * @param {string} url
 	 * @param {{window:Electron.BrowserWindow,config:object}} options
 	 */
-	start(url, options) {
+	start(options) {
 		_ConnectionManager_window.set(this, options.window);
 		_ConnectionManager_config.set(this, options.config);
 		_ConnectionManager_logger.set(this, new LucidLog({
 			levels: options.config.appLogLevels.split(',')
 		}));
-		_ConnectionManager_currentUrl.set(this, url ? url : this.config.url);
+		_ConnectionManager_currentUrl.set(this, this.config.url);
 		ipcMain.on('offline-retry', assignOfflineRetryHandler(this));
 		powerMonitor.on('resume', assignSystemResumeEventHandler(this));
 		this.window.webContents.on('did-fail-load', assignOnDidFailLoadEventHandler(this));

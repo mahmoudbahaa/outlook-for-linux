@@ -1,8 +1,6 @@
 const { app, ipcMain, desktopCapturer, systemPreferences, powerMonitor } = require('electron');
 const path = require('path');
-const fs = require('fs');
 const { LucidLog } = require('lucid-log');
-const { httpHelper } = require('./helpers');
 
 const isDev = require('electron-is-dev');
 const os = require('os');
@@ -92,7 +90,6 @@ if (!gotTheLock) {
 	ipcMain.handle('getZoomLevel', handleGetZoomLevel);
 	ipcMain.handle('saveZoomLevel', handleSaveZoomLevel);
 	ipcMain.handle('desktopCapturerGetSources', (event, opts) => desktopCapturer.getSources(opts));
-	ipcMain.handle('getCustomBGList', handleGetCustomBGList);
 	ipcMain.handle('play-notification-sound', playNotificationSound);
 	ipcMain.handle('user-status-changed', userStatusChangedHandler);
 	ipcMain.handle('set-badge-count', setBadgeCountHandler);
@@ -138,7 +135,6 @@ function onAppTerminated(signal) {
 }
 
 function handleAppReady() {
-	downloadCustomBGServiceRemoteConfig();
 	process.on('SIGTRAP', onAppTerminated);
 	process.on('SIGINT', onAppTerminated);
 	process.on('SIGTERM', onAppTerminated);
@@ -171,15 +167,6 @@ async function handleSaveZoomLevel(_, args) {
 	partition.name = args.partition;
 	partition.zoomLevel = args.zoomLevel;
 	savePartition(partition);
-}
-
-async function handleGetCustomBGList() {
-	const file = path.join(app.getPath('userData'), 'custom_bg_remote.json');
-	if (!fs.existsSync(file)) {
-		return [];
-	} else {
-		return JSON.parse(fs.readFileSync(file));
-	}
 }
 
 function getPartitions() {
@@ -247,62 +234,4 @@ async function userStatusChangedHandler(event, options) {
 async function setBadgeCountHandler(event, count) {
 	logger.debug(`Badge count set to '${count}'`);
 	app.setBadgeCount(count);
-}
-
-async function downloadCustomBGServiceRemoteConfig() {
-	let customBGUrl;
-	try {
-		customBGUrl = new URL('', config.customBGServiceBaseUrl);
-	}
-	catch (err) {
-		customBGUrl = new URL('', 'http://localhost');
-	}
-
-	const remotePath = httpHelper.joinURLs(customBGUrl.href, 'config.json');
-	logger.debug(`Fetching custom background configuration from '${remotePath}'`);
-	httpHelper.getAsync(remotePath)
-		.then(onCustomBGServiceConfigDownloadSuccess)
-		.catch(onCustomBGServiceConfigDownloadFailure);
-	if (config.customBGServiceConfigFetchInterval > 0) {
-		setTimeout(downloadCustomBGServiceRemoteConfig, config.customBGServiceConfigFetchInterval * 1000);
-	}
-}
-
-function onCustomBGServiceConfigDownloadSuccess(data) {
-	const downloadPath = path.join(app.getPath('userData'), 'custom_bg_remote.json');
-	try {
-		const configJSON = JSON.parse(data);
-		for (let i = 0; i < configJSON.length; i++) {
-			setPath(configJSON[i]);
-		}
-		fs.writeFileSync(downloadPath, JSON.stringify(configJSON));
-		logger.debug(`Custom background service remote configuration stored at '${downloadPath}'`);
-	}
-	catch (err) {
-		logger.error(`Failed to save remote configuration at '${downloadPath}'`);
-	}
-}
-
-/**
- * @param {{filetype: string,id: string, name: string, src: string, thumb_src: string }} cfg 
- */
-function setPath(cfg) {
-	if (!cfg.src.startsWith('/outlook-for-linux/custom-bg/')) {
-		cfg.src = httpHelper.joinURLs('/outlook-for-linux/custom-bg/', cfg.src);
-	}
-
-	if (!cfg.thumb_src.startsWith('/outlook-for-linux/custom-bg/')) {
-		cfg.thumb_src = httpHelper.joinURLs('/outlook-for-linux/custom-bg/', cfg.thumb_src);
-	}
-}
-
-function onCustomBGServiceConfigDownloadFailure(err) {
-	const dlpath = path.join(app.getPath('userData'), 'custom_bg_remote.json');
-	logger.error(err.message);
-	try {
-		fs.writeFileSync(dlpath, JSON.stringify([]));
-	}
-	catch (err) {
-		logger.error(`Failed to save remote configuration at '${dlpath}'`);
-	}
 }

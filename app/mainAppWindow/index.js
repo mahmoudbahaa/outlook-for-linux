@@ -1,15 +1,13 @@
 require('@electron/remote/main').initialize();
-const { shell, BrowserWindow, ipcMain, app, session, nativeTheme, powerSaveBlocker, dialog } = require('electron');
+const { shell, BrowserWindow, ipcMain, app, session, nativeTheme, dialog } = require('electron');
 const isDarkMode = nativeTheme.shouldUseDarkColors;
 const windowStateKeeper = require('electron-window-state');
-const path = require('path');
 const login = require('../login');
 const customCSS = require('../customCSS');
 const Menus = require('../menus');
 const { StreamSelector } = require('../streamSelector');
 const { LucidLog } = require('lucid-log');
 const { SpellCheckProvider } = require('../spellCheckProvider');
-const { httpHelper } = require('../helpers');
 const exec = require('child_process').exec;
 const TrayIconChooser = require('../browser/tools/trayIconChooser');
 // eslint-disable-next-line no-unused-vars
@@ -21,27 +19,17 @@ const connMgr =  require('../connectionManager');
  */
 let iconChooser;
 
-let blockerId = null;
-
-let isOnCall = false;
-
 let isControlPressed = false;
-
-/**
- * @type {URL}
- */
-let customBGServiceUrl;
 
 /**
  * @type {LucidLog}
  */
 let logger;
 
-let aboutBlankRequestCount = 0;
 let config;
 
 /**
- * @type {BrowserWindow}
+ * @type {Window}
  */
 let window = null;
 
@@ -68,8 +56,7 @@ exports.onAppReady = async function onAppReady(mainConfig) {
 
 	addEventHandlers();
 
-	const url = processArgs(process.argv);
-	connMgr.start(url,{
+	connMgr.start({
 		window: window,
 		config: config
 	});
@@ -81,19 +68,10 @@ function onSpellCheckerLanguageChanged(languages) {
 	appConfig.legacyConfigStore.set('spellCheckerLanguages', languages);
 }
 
-let allowFurtherRequests = true;
-
-exports.onAppSecondInstance = function onAppSecondInstance(event, args) {
+exports.onAppSecondInstance = function onAppSecondInstance(event) {
 	logger.debug('second-instance started');
 	if (window) {
 		event.preventDefault();
-		const url = processArgs(args);
-		if (url && allowFurtherRequests) {
-			allowFurtherRequests = false;
-			setTimeout(() => { allowFurtherRequests = true; }, 5000);
-			window.loadURL(url, { userAgent: config.chromeUserAgent });
-		}
-
 		restoreWindow();
 	}
 };
@@ -169,108 +147,12 @@ function restoreWindow() {
 	window.focus();
 }
 
-function processArgs(args) {
-	var regHttps = /^https:\/\/outlook.microsoft.com\/l\/(meetup-join|channel)\//g;
-	var regMS = /^msoutlook:\/l\/(meetup-join|channel)\//g;
-	logger.debug('processArgs:', args);
-	for (const arg of args) {
-		if (regHttps.test(arg)) {
-			logger.debug('A url argument received with https protocol');
-			window.show();
-			return arg;
-		}
-		if (regMS.test(arg)) {
-			logger.debug('A url argument received with msoutlook protocol');
-			window.show();
-			return config.url + arg.substring(8, arg.length);
-		}
-	}
-}
-
-/**
- * @param {Electron.OnBeforeRequestListenerDetails} details 
- * @param {Electron.CallbackResponse} callback 
- */
-function onBeforeRequestHandler(details, callback) {
-	if (details.url.startsWith('https://statics.outlook.cdn.office.net/outlook-for-linux/custom-bg/')) {
-		const reqUrl = details.url.replace('https://statics.outlook.cdn.office.net/outlook-for-linux/custom-bg/', '');
-		const imgUrl = getBGRedirectUrl(reqUrl);
-		logger.debug(`Forwarding '${details.url}' to '${imgUrl}'`);
-		callback({ redirectURL: imgUrl });
-	}
-	// Check if the counter was incremented
-	else if (aboutBlankRequestCount < 1) {
-		// Proceed normally
-		callback({});
-	} else {
-		// Open the request externally
-		logger.debug('DEBUG - webRequest to  ' + details.url + ' intercepted!');
-		shell.openExternal(details.url);
-		// decrement the counter
-		aboutBlankRequestCount -= 1;
-		callback({ cancel: true });
-	}
-}
-
-function getBGRedirectUrl(rel) {
-	return httpHelper.joinURLs(customBGServiceUrl.href, rel);
-}
-
-/**
- * @param {Electron.OnHeadersReceivedListenerDetails} details 
- * @param {Electron.HeadersReceivedResponse} callback 
- */
-function onHeadersReceivedHandler(details, callback) {
-	if (details.responseHeaders['content-security-policy']) {
-		const policies = details.responseHeaders['content-security-policy'][0].split(';');
-		setImgSrcSecurityPolicy(policies);
-		setConnectSrcSecurityPolicy(policies);
-		details.responseHeaders['content-security-policy'][0] = policies.join(';');
-	}
-	callback({
-		responseHeaders: details.responseHeaders
-	});
-}
-
-function setConnectSrcSecurityPolicy(policies) {
-	const connectsrcIndex = policies.findIndex(f => f.indexOf('connect-src') >= 0);
-	if (connectsrcIndex >= 0) {
-		policies[connectsrcIndex] = policies[connectsrcIndex] + ` ${customBGServiceUrl.origin}`;
-	}
-}
-
-function setImgSrcSecurityPolicy(policies) {
-	const imgsrcIndex = policies.findIndex(f => f.indexOf('img-src') >= 0);
-	if (imgsrcIndex >= 0) {
-		policies[imgsrcIndex] = policies[imgsrcIndex] + ` ${customBGServiceUrl.origin}`;
-	}
-}
-
-/**
- * @param {Electron.OnBeforeSendHeadersListenerDetails} detail 
- * @param {Electron.BeforeSendResponse} callback 
- */
-function onBeforeSendHeadersHandler(detail, callback) {
-	if (detail.url.startsWith(customBGServiceUrl.href)) {
-		detail.requestHeaders['Access-Control-Allow-Origin'] = '*';
-	}
-	callback({
-		requestHeaders: detail.requestHeaders
-	});
-}
-
 /**
  * @param {Electron.HandlerDetails} details 
  * @returns {{action: 'deny'} | {action: 'allow', outlivesOpener?: boolean, overrideBrowserWindowOptions?: Electron.BrowserWindowConstructorOptions}}
  */
 function onNewWindow(details) {
-	if (details.url.startsWith('https://outlook.microsoft.com/l/meetup-join')) {
-		logger.debug('DEBUG - captured meetup-join url');
-		return { action: 'deny' };
-	} else if (details.url === 'about:blank' || details.url === 'about:blank#blocked') {
-		// Increment the counter
-		aboutBlankRequestCount += 1;
-
+	if (details.url === 'about:blank' || details.url === 'about:blank#blocked') {
 		logger.debug('DEBUG - captured about:blank');
 
 		return { action: 'deny' };
@@ -290,34 +172,13 @@ function onWindowClosed() {
 }
 
 function addEventHandlers() {
-	initializeCustomBGServiceURL();
 	window.on('page-title-updated', onPageTitleUpdated);
 	window.webContents.setWindowOpenHandler(onNewWindow);
-	window.webContents.session.webRequest.onBeforeRequest({ urls: ['https://*/*'] }, onBeforeRequestHandler);
-	window.webContents.session.webRequest.onHeadersReceived({ urls: ['https://*/*'] }, onHeadersReceivedHandler);
-	window.webContents.session.webRequest.onBeforeSendHeaders(getWebRequestFilterFromURL(), onBeforeSendHeadersHandler);
 	login.handleLoginDialogTry(window);
 	window.webContents.on('did-finish-load', onDidFinishLoad);
 	window.on('closed', onWindowClosed);
 	window.webContents.addListener('before-input-event', onBeforeInput);
 }
-
-function getWebRequestFilterFromURL() {
-	const filter = customBGServiceUrl.protocol === 'http:' ? { urls: ['http://*/*'] } : { urls: ['https://*/*'] };
-	return filter;
-}
-
-function initializeCustomBGServiceURL() {
-	try {
-		customBGServiceUrl = new URL('', config.customBGServiceBaseUrl);
-		logger.debug(`Custom background service url is '${config.customBGServiceBaseUrl}'`);
-	}
-	catch (err) {
-		logger.error(`Invalid custom background service url '${config.customBGServiceBaseUrl}', updating to default 'http://localhost'`);
-		customBGServiceUrl = new URL('', 'http://localhost');
-	}
-}
-
 
 /**
  * @param {Electron.Event} event 
@@ -418,7 +279,7 @@ async function createWindow() {
 	// Create the window
 	const window = createNewBrowserWindow(windowState);
 	require('@electron/remote/main').enable(window.webContents);
-	assignEventHandlers(window);
+	assignEventHandlers();
 
 	windowState.manage(window);
 
@@ -429,14 +290,9 @@ async function createWindow() {
 	return window;
 }
 
-function assignEventHandlers(newWindow) {
+function assignEventHandlers() {
 	ipcMain.on('select-source', assignSelectSourceHandler());
 	ipcMain.handle('select-source-wayland', assignSelectSourceHandlerWayland());
-	ipcMain.handle('call-connected', handleOnCallConnected);
-	ipcMain.handle('call-disconnected', handleOnCallDisconnected);
-	if (config.screenLockInhibitionMethod === 'WakeLockSentinel') {
-		newWindow.on('restore', enableWakeLockOnWindowRestore);
-	}
 }
 
 function createNewBrowserWindow(windowState) {
@@ -455,7 +311,7 @@ function createNewBrowserWindow(windowState) {
 
 		webPreferences: {
 			partition: config.partition,
-			preload: path.join(__dirname, '..', 'browser', 'index.js'),
+			// preload: path.join(__dirname, '..', 'browser', 'index.js'),
 			plugins: true,
 			contextIsolation: false,
 			sandbox: false,
@@ -490,53 +346,4 @@ function assignSelectSourceHandler() {
 			event.reply('select-source', source);
 		});
 	};
-}
-
-async function handleOnCallConnected() {
-	isOnCall = true;
-	return config.screenLockInhibitionMethod === 'Electron' ? disableScreenLockElectron() : disableScreenLockWakeLockSentinel();
-}
-
-function disableScreenLockElectron() {
-	var isDisabled = false;
-	if (blockerId == null) {
-		blockerId = powerSaveBlocker.start('prevent-display-sleep');
-		logger.debug(`Power save is disabled using ${config.screenLockInhibitionMethod} API.`);
-		isDisabled = true;
-	}
-	return isDisabled;
-}
-
-function disableScreenLockWakeLockSentinel() {
-	window.webContents.send('enable-wakelock');
-	logger.debug(`Power save is disabled using ${config.screenLockInhibitionMethod} API.`);
-	return true;
-}
-
-async function handleOnCallDisconnected() {
-	isOnCall = false;
-	return config.screenLockInhibitionMethod === 'Electron' ? enableScreenLockElectron() : enableScreenLockWakeLockSentinel();
-}
-
-function enableScreenLockElectron() {
-	var isEnabled = false;
-	if (blockerId != null && powerSaveBlocker.isStarted(blockerId)) {
-		logger.debug(`Power save is restored using ${config.screenLockInhibitionMethod} API`);
-		powerSaveBlocker.stop(blockerId);
-		blockerId = null;
-		isEnabled = true;
-	}
-	return isEnabled;
-}
-
-function enableScreenLockWakeLockSentinel() {
-	window.webContents.send('disable-wakelock');
-	logger.debug(`Power save is restored using ${config.screenLockInhibitionMethod} API`);
-	return true;
-}
-
-function enableWakeLockOnWindowRestore() {
-	if (isOnCall) {
-		window.webContents.send('enable-wakelock');
-	}
 }

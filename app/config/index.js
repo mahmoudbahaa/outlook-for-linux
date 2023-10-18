@@ -71,21 +71,6 @@ function argv(configPath) {
 				describe: 'Google Chrome User Agent',
 				type: 'string'
 			},
-			customBGServiceBaseUrl: {
-				default: 'http://localhost',
-				describe: 'Base URL of the server which provides custom background images',
-				type: 'string'
-			},
-			customBGServiceIgnoreMSDefaults: {
-				default: false,
-				describe: 'A flag indicates whether to ignore Microsoft provided images or not',
-				type: 'boolean'
-			},
-			customBGServiceConfigFetchInterval: {
-				default: 0,
-				describe: 'A numeric value in seconds as poll interval to download background service config download',
-				type: 'number'
-			},
 			customCACertsFingerprints: {
 				default: [],
 				describe: 'Array of custom CA Certs Fingerprints to allow SSL unrecognized signer or self signed certificate',
@@ -186,12 +171,6 @@ function argv(configPath) {
 				default: 'true',
 				describe: 'Set enable-ntlm-v2 value',
 				type: 'string'
-			},
-			screenLockInhibitionMethod: {
-				default: 'Electron',
-				describe: 'Screen lock inhibition method to be used (Electron/WakeLockSentinel)',
-				type: 'string',
-				choices: ['Electron', 'WakeLockSentinel']
 			},
 			spellCheckerLanguages: {
 				default: [],
