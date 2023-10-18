@@ -26,7 +26,7 @@ jobs:
         run: yarn --link-duplicates --pure-lockfile
 
       - name: Release
-        if: contains(github.ref, 'develop')
+        if: contains(github.ref, 'develop-outlook ')
         run: yarn dist:linux:x64 -- --publish always
 
   linux_arm64:
@@ -45,7 +45,7 @@ jobs:
         run: yarn --link-duplicates --pure-lockfile
 
       - name: Release
-        if: contains(github.ref, 'develop')
+        if: contains(github.ref, 'develop-outlook ')
         run: yarn dist:linux:arm64 -- --publish always
 
   linux_arm:
@@ -64,7 +64,7 @@ jobs:
         run: yarn --link-duplicates --pure-lockfile
 
       - name: Release
-        if: contains(github.ref, 'develop')
+        if: contains(github.ref, 'develop-outlook ')
         run: yarn dist:linux:arm -- --publish always
 
   dmg:
@@ -83,7 +83,7 @@ jobs:
         run: yarn --link-duplicates --pure-lockfile
 
       - name: Release
-        if: contains(github.ref, 'develop')
+        if: contains(github.ref, 'develop-outlook ')
         run: yarn dist:mac -- --publish always
 
   exe:
@@ -102,5 +102,5 @@ jobs:
         run: yarn --link-duplicates --pure-lockfile
 
       - name: Release
-        if: contains(github.ref, 'develop')
+        if: contains(github.ref, 'develop-outlook ')
         run: yarn dist:windows -- --publish always

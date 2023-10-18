@@ -2,10 +2,10 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [develop]
+    branches: [develop-outlook ]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [develop]
+    branches: [develop-outlook ]
   schedule:
     - cron: '0 17 * * 6'
 
