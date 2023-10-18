@@ -1,6 +1,5 @@
 const TrayIconRenderer = require('../tools/trayIconRenderer');
 const activityHub = require('../tools/activityHub');
-const wakeLock = require('../tools/wakeLock');
 
 class ActivityManager {
 	/**
@@ -26,7 +25,6 @@ class ActivityManager {
 
 	start() {
 		setActivityHandlers(this);
-		setEventHandlers(this);
 		activityHub.start();
 		activityHub.setDefaultTitle(this.config.appTitle);
 		this.watchSystemIdleState();
@@ -51,14 +49,6 @@ function setActivityHandlers(self) {
 	activityHub.on('call-disconnected', callDisconnectedHandler(self));
 	activityHub.on('meeting-started', meetingStartNotifyHandler(self));
 	activityHub.on('my-status-changed', myStatusChangedHandler(self));
-}
-
-/**
- * @param {ActivityManager} self 
- */
-function setEventHandlers(self) {
-	self.ipcRenderer.on('enable-wakelock', () => wakeLock.enable());
-	self.ipcRenderer.on('disable-wakelock', () => wakeLock.disable());
 }
 
 /**
