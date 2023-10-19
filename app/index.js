@@ -1,10 +1,8 @@
-const { app, ipcMain, desktopCapturer, systemPreferences } = require('electron');
+const { app, ipcMain, desktopCapturer} = require('electron');
 const path = require('path');
 const { LucidLog } = require('lucid-log');
 
 const isDev = require('electron-is-dev');
-const os = require('os');
-const isMac = os.platform() === 'darwin';
 if (app.commandLine.hasSwitch('customUserDir')) {
 	app.setPath('userData', app.commandLine.getSwitchValue('customUserDir'));
 }

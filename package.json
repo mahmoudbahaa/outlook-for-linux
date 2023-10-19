@@ -21,7 +21,7 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint **/*.js",
-    "start": "yarn install && electron ./app",
+    "start": "electron ./app",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "dist:linux": "electron-builder --linux",
@@ -48,16 +48,13 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "electron": "^27.0.0",
+    "electron": "27.0.1",
     "electron-builder": "24.6.4",
     "eslint": "8.51.0",
     "yarn": "1.22.19"
   },
   "build": {
     "appId": "outlook-for-linux",
-    "asarUnpack": [
-      "node_modules/spellchecker/vendor/hunspell_dictionaries"
-    ],
     "protocols": {
       "name": "msoutlook",
       "schemes": [
@@ -71,7 +68,7 @@
       }
     ],
     "linux": {
-      "category": "Chat;Network;Office",
+      "category": "Mail;Network;Office",
       "packageCategory": "net",
       "executableName": "outlook-for-linux",
       "synopsis": "Outlook for Linux",
@@ -106,11 +103,7 @@
       },
       "plugs": [
         "default",
-        "camera",
-        "screen-inhibit-control",
         "wayland",
-        "upower-observe",
-        "audio-record",
         "hardware-observe",
         "network-bind",
         "network-manager-observe",
