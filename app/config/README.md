@@ -32,7 +32,6 @@ Here is the list of available arguments and its usage:
 | menubar | A value controls the menu bar behaviour (auto/visible/hidden) | auto |
 | minimized | Start the application minimized | false |
 | ntlmV2enabled | set enable-ntlm-v2 value | true |
-| spellCheckerLanguages | Language codes to use with Electron\'s spell checker (experimental) | [] |
 | url | url to open | [https://outlook.microsoft.com/](https://outlook.microsoft.com/) |
 | version | show the version number | false |
 | webDebug | Start with the browser developer tools open  |  false |

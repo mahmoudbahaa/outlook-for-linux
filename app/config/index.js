@@ -122,11 +122,6 @@ function argv(configPath) {
 				describe: 'Set enable-ntlm-v2 value',
 				type: 'string'
 			},
-			spellCheckerLanguages: {
-				default: [],
-				describe: 'Array of languages to use with Electron\'s spell checker (experimental)',
-				type: 'array'
-			},
 			url: {
 				default: 'https://outlook.office.com/mail/',
 				describe: 'Microsoft Outlook URL',

@@ -5,7 +5,6 @@ const windowStateKeeper = require('electron-window-state');
 const login = require('../login');
 const Menus = require('../menus');
 const { LucidLog } = require('lucid-log');
-const { SpellCheckProvider } = require('../spellCheckProvider');
 const exec = require('child_process').exec;
 const TrayIconChooser = require('../browser/tools/trayIconChooser');
 // eslint-disable-next-line no-unused-vars
@@ -49,8 +48,7 @@ exports.onAppReady = async function onAppReady(mainConfig) {
 
 	window = await createWindow();
 
-	const m = new Menus(window, config, iconChooser.getFile());
-	m.onSpellCheckerLanguageChanged = onSpellCheckerLanguageChanged;
+	new Menus(window, config, iconChooser.getFile());
 
 	addEventHandlers();
 
@@ -62,18 +60,12 @@ exports.onAppReady = async function onAppReady(mainConfig) {
 	applyAppConfiguration(config, window);
 };
 
-function onSpellCheckerLanguageChanged(languages) {
-	appConfig.legacyConfigStore.set('spellCheckerLanguages', languages);
-}
-
 /**
  * Applies the configuration passed as arguments when executing the app.
  * @param config Configuration object.
  * @param {BrowserWindow} window The browser window.
  */
 function applyAppConfiguration(config, window) {
-	applySpellCheckerConfiguration(config.spellCheckerLanguages, window);
-
 	if (typeof config.clientCertPath !== 'undefined' && config.clientCertPath !== '') {
 		app.importCertificate({ certificate: config.clientCertPath, password: config.clientCertPassword }, (result) => {
 			logger.info('Loaded certificate: ' + config.clientCertPath + ', result: ' + result);
@@ -90,23 +82,6 @@ function applyAppConfiguration(config, window) {
 
 	if (config.webDebug) {
 		window.openDevTools();
-	}
-}
-
-/**
- * Applies Electron's spell checker capabilities if language codes are provided.
- * @param {Array<string>} languages Array of language codes to use with spell checker.
- * @param {BrowserWindow} window The browser window.
- */
-function applySpellCheckerConfiguration(languages, window) {
-	const spellCheckProvider = new SpellCheckProvider(window, logger);
-	if (spellCheckProvider.setLanguages(languages).length == 0 && languages.length > 0) {
-		// If failed to set user supplied languages, fallback to system locale.
-		const systemList = [app.getLocale()];
-		if (app.getLocale() !== app.getSystemLocale()) {
-			systemList.push(app.getSystemLocale());
-		}
-		spellCheckProvider.setLanguages(systemList);
 	}
 }
 
