@@ -31,30 +31,9 @@ exports = module.exports = (Menus) => ({
 		{
 			type: 'separator',
 		},
-		getSettingsMenu(Menus)
-		,
-		{
-			type: 'separator',
-		},
 		getQuitMenu(Menus)
 	],
 });
-
-function getSettingsMenu(Menus) {
-	return {
-		label: 'Settings',
-		submenu: [
-			{
-				label: 'Save',
-				click: () => Menus.saveSettings()
-			},
-			{
-				label: 'Restore',
-				click: () => Menus.restoreSettings()
-			}
-		]
-	};
-}
 
 function getQuitMenu(Menus) {
 	return {

@@ -1,6 +1,4 @@
-const { app, Menu, dialog, session, ipcMain } = require('electron');
-const fs = require('fs'),
-	path = require('path');
+const { app, Menu, dialog, session} = require('electron');
 const application = require('./application');
 const preferences = require('./preferences');
 const help = require('./help');
@@ -123,35 +121,6 @@ class Menus {
 			this.tray.close();
 			this.window.webContents.session.flushStorageData();
 		}
-	}
-
-	saveSettings() {
-		ipcMain.once('get-outlook-settings', saveSettingsInternal);
-		this.window.webContents.send('get-outlook-settings');
-	}
-
-	restoreSettings() {
-		ipcMain.once('set-outlook-settings', restoreSettingsInternal);
-		this.window.webContents.send('set-outlook-settings', JSON.parse(fs.readFileSync(path.join(app.getPath('userData'), 'outlook_settings.json'))));
-	}
-}
-
-function saveSettingsInternal(event, arg) {
-	fs.writeFileSync(path.join(app.getPath('userData'), 'outlook_settings.json'), JSON.stringify(arg));
-	dialog.showMessageBoxSync(this.window, {
-		message: 'Settings have been saved successfully!',
-		title: 'Save settings',
-		type: 'info'
-	});
-}
-
-function restoreSettingsInternal(event, arg) {
-	if (arg) {
-		dialog.showMessageBoxSync(this.window, {
-			message: 'Settings have been restored successfully!',
-			title: 'Restore settings',
-			type: 'info'
-		});
 	}
 }
 

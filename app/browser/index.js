@@ -5,7 +5,7 @@
 	let config;
 	ipcRenderer.invoke('getConfig').then(mainConfig => {
 		config = mainConfig;
-		initializeModules(config, ipcRenderer);
+		initializeModules(config);
 	});
 
 	let classicNotification = window.Notification;
@@ -41,13 +41,12 @@
 }());
 
 /**
- * @param {object} config 
- * @param {Electron.IpcRenderer} ipcRenderer 
+ * @param {object} config
  */
-function initializeModules(config, ipcRenderer) {
+function initializeModules(config) {
 	require('./tools/zoom').init(config);
 	require('./tools/shortcuts').init(config);
-	require('./tools/settings').init(config, ipcRenderer);
+	require('./tools/settings').init(config);
 	// require('../notifications/mailObserver').observeUnreadInit();
 }
 
