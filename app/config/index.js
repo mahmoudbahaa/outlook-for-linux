@@ -20,11 +20,6 @@ function argv(configPath) {
 		.env(true)
 		.config(configFile)
 		.options({
-			appActiveCheckInterval: {
-				default: 2,
-				describe: 'A numeric value in seconds as poll interval to check if the system is active from being idle',
-				type: 'number'
-			},
 			appIcon: {
 				default: '',
 				describe: 'Outlook app icon to show in the tray',
@@ -36,16 +31,6 @@ function argv(configPath) {
 				type: 'string',
 				choices: ['default', 'light', 'dark']
 			},
-			appIdleTimeout: {
-				default: 300,
-				describe: 'A numeric value in seconds as duration before app considers the system as idle',
-				type: 'number'
-			},
-			appIdleTimeoutCheckInterval: {
-				default: 10,
-				describe: 'A numeric value in seconds as poll interval to check if the appIdleTimeout is reached',
-				type: 'number'
-			},
 			appLogLevels: {
 				default: 'error,warn',
 				describe: 'Comma separated list of log levels (error,warn,info,debug)',
@@ -56,50 +41,15 @@ function argv(configPath) {
 				describe: 'A text to be suffixed with page title',
 				type: 'string'
 			},
-			authServerWhitelist: {
-				default: '*',
-				describe: 'Set auth-server-whitelist value',
-				type: 'string'
-			},
-			bypassWaylandSourceSelection: {
-				default: false,
-				describe: 'A flag indicates whether to bypass wayland source selection dialog when screen a share request is received',
-				type: 'boolean'
-			},
 			chromeUserAgent: {
 				default: `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${process.versions.chrome} Safari/537.36`,
 				describe: 'Google Chrome User Agent',
 				type: 'string'
 			},
-			customBGServiceBaseUrl: {
-				default: 'http://localhost',
-				describe: 'Base URL of the server which provides custom background images',
-				type: 'string'
-			},
-			customBGServiceIgnoreMSDefaults: {
-				default: false,
-				describe: 'A flag indicates whether to ignore Microsoft provided images or not',
-				type: 'boolean'
-			},
-			customBGServiceConfigFetchInterval: {
-				default: 0,
-				describe: 'A numeric value in seconds as poll interval to download background service config download',
-				type: 'number'
-			},
 			customCACertsFingerprints: {
 				default: [],
 				describe: 'Array of custom CA Certs Fingerprints to allow SSL unrecognized signer or self signed certificate',
 				type: 'array'
-			},
-			customCSSName: {
-				default: '',
-				describe: 'custom CSS name for the packaged available css files. Currently those are: "compactDark", "compactLight", "tweaks", "condensedDark" and "condensedLight" ',
-				type: 'string'
-			},
-			customCSSLocation: {
-				default: '',
-				describe: 'custom CSS styles file location',
-				type: 'string'
 			},
 			customUserDir: {
 				default: null,
@@ -130,16 +80,6 @@ function argv(configPath) {
 				default: '',
 				describe: 'Default application to be used to open the HTTP URLs',
 				type: 'string'
-			},	 
-			disableAutogain: {
-				default: false,
-				describe: 'A flag indicates whether to disable mic auto gain or not',
-				type: 'boolean'
-			},
-			disableMeetingNotifications: {
-				default: false,
-				describe: 'Whether to disable meeting notifications or not',
-				type: 'boolean'
 			},
 			disableNotifications: {
 				default: false,
@@ -148,12 +88,7 @@ function argv(configPath) {
 			},
 			disableNotificationSound: {
 				default: false,
-				describe: 'Disable chat/meeting start notification sound',
-				type: 'boolean'
-			},
-			disableNotificationSoundIfNotAvailable: {
-				default: false,
-				describe: 'Disables notification sound unless status is Available (e.g. while in a call, busy, etc.)',
+				describe: 'Disable notification sound',
 				type: 'boolean'
 			},
 			disableNotificationWindowFlash: {
@@ -186,17 +121,6 @@ function argv(configPath) {
 				default: 'true',
 				describe: 'Set enable-ntlm-v2 value',
 				type: 'string'
-			},
-			screenLockInhibitionMethod: {
-				default: 'Electron',
-				describe: 'Screen lock inhibition method to be used (Electron/WakeLockSentinel)',
-				type: 'string',
-				choices: ['Electron', 'WakeLockSentinel']
-			},
-			spellCheckerLanguages: {
-				default: [],
-				describe: 'Array of languages to use with Electron\'s spell checker (experimental)',
-				type: 'array'
 			},
 			url: {
 				default: 'https://outlook.office.com/',

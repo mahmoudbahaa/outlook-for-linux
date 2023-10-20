@@ -1,12 +1,7 @@
-const { app, ipcMain, desktopCapturer, systemPreferences, powerMonitor } = require('electron');
+const { app, ipcMain } = require('electron');
 const path = require('path');
-const fs = require('fs');
 const { LucidLog } = require('lucid-log');
-const { httpHelper } = require('./helpers');
-
 const isDev = require('electron-is-dev');
-const os = require('os');
-const isMac = os.platform() === 'darwin';
 if (app.commandLine.hasSwitch('customUserDir')) {
 	app.setPath('userData', app.commandLine.getSwitchValue('customUserDir'));
 }
@@ -24,13 +19,7 @@ const logger = new LucidLog({
 const notificationSounds = [{
 	type: 'new-message',
 	file: path.join(config.appPath, 'assets/sounds/new_message.wav')
-},
-{
-	type: 'meeting-started',
-	file: path.join(config.appPath, 'assets/sounds/meeting_started.wav')
 }];
-
-let userStatus = -1;
 
 // Notification sound player
 /**
@@ -50,15 +39,11 @@ const gotTheLock = app.requestSingleInstanceLock();
 const mainAppWindow = require('./mainAppWindow');
 
 if (config.proxyServer) app.commandLine.appendSwitch('proxy-server', config.proxyServer);
-app.commandLine.appendSwitch('auth-server-whitelist', config.authServerWhitelist);
 app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling');
 app.commandLine.appendSwitch('enable-ntlm-v2', config.ntlmV2enabled);
 app.commandLine.appendSwitch('try-supported-channel-layouts');
 
-if (isMac) {
-	requestMediaAccess();
-
-} else if (process.env.XDG_SESSION_TYPE === 'wayland') {
+if (process.env.XDG_SESSION_TYPE === 'wayland') {
 	logger.info('Running under Wayland, switching to PipeWire...');
 
 	const features = app.commandLine.hasSwitch('enable-features') ? app.commandLine.getSwitchValue('enable-features').split(',') : [];
@@ -87,14 +72,9 @@ if (!gotTheLock) {
 	app.on('will-quit', () => logger.debug('will-quit'));
 	app.on('certificate-error', handleCertificateError);
 	ipcMain.handle('getConfig', handleGetConfig);
-	ipcMain.handle('getSystemIdleTime', handleGetSystemIdleTime);
-	ipcMain.handle('getSystemIdleState', handleGetSystemIdleState);
 	ipcMain.handle('getZoomLevel', handleGetZoomLevel);
 	ipcMain.handle('saveZoomLevel', handleSaveZoomLevel);
-	ipcMain.handle('desktopCapturerGetSources', (event, opts) => desktopCapturer.getSources(opts));
-	ipcMain.handle('getCustomBGList', handleGetCustomBGList);
 	ipcMain.handle('play-notification-sound', playNotificationSound);
-	ipcMain.handle('user-status-changed', userStatusChangedHandler);
 	ipcMain.handle('set-badge-count', setBadgeCountHandler);
 }
 
@@ -106,11 +86,7 @@ async function playNotificationSound(event, options) {
 		logger.debug('Notification sounds are disabled');
 		return;
 	}
-	// Notification sound disabled if not available set in config and user status is not "Available" (or is unknown)
-	if (config.disableNotificationSoundIfNotAvailable && userStatus !== 1 && userStatus !== -1) {
-		logger.debug('Notification sounds are disabled when user is not active');
-		return;
-	}
+	
 	const sound = notificationSounds.filter(ns => {
 		return ns.type === options.type;
 	})[0];
@@ -138,7 +114,6 @@ function onAppTerminated(signal) {
 }
 
 function handleAppReady() {
-	downloadCustomBGServiceRemoteConfig();
 	process.on('SIGTRAP', onAppTerminated);
 	process.on('SIGINT', onAppTerminated);
 	process.on('SIGTERM', onAppTerminated);
@@ -151,16 +126,6 @@ async function handleGetConfig() {
 	return config;
 }
 
-async function handleGetSystemIdleTime() {
-	return powerMonitor.getSystemIdleTime();
-}
-
-async function handleGetSystemIdleState() {
-	const idleState = powerMonitor.getSystemIdleState(config.appIdleTimeout);
-	logger.debug(`GetSystemIdleState => IdleTimeout: ${config.appIdleTimeout}s, IdleTimeoutPollInterval: ${config.appIdleTimeoutCheckInterval}s, ActiveCheckPollInterval: ${config.appActiveCheckInterval}s, IdleTime: ${powerMonitor.getSystemIdleTime()}s, IdleState: '${idleState}'`);
-	return idleState;
-}
-
 async function handleGetZoomLevel(_, name) {
 	const partition = getPartition(name) || {};
 	return partition.zoomLevel ? partition.zoomLevel : 0;
@@ -171,15 +136,6 @@ async function handleSaveZoomLevel(_, args) {
 	partition.name = args.partition;
 	partition.zoomLevel = args.zoomLevel;
 	savePartition(partition);
-}
-
-async function handleGetCustomBGList() {
-	const file = path.join(app.getPath('userData'), 'custom_bg_remote.json');
-	if (!fs.existsSync(file)) {
-		return [];
-	} else {
-		return JSON.parse(fs.readFileSync(file));
-	}
 }
 
 function getPartitions() {
@@ -220,24 +176,6 @@ function handleCertificateError() {
 	certificateModule.onAppCertificateError(arg, logger);
 }
 
-async function requestMediaAccess() {
-	['camera', 'microphone', 'screen'].map(async (permission) => {
-		const status = await systemPreferences.askForMediaAccess(permission);
-		logger.debug(`mac permission ${permission} asked current status ${status}`);
-	});
-}
-
-/**
- * Handle user-status-changed message
- * 
- * @param {*} event 
- * @param {*} options 
- */
-async function userStatusChangedHandler(event, options) {
-	userStatus = options.data.status;
-	logger.debug(`User status changed to '${userStatus}'`);
-}
-
 /**
  * Handle user-status-changed message
  * 
@@ -247,62 +185,4 @@ async function userStatusChangedHandler(event, options) {
 async function setBadgeCountHandler(event, count) {
 	logger.debug(`Badge count set to '${count}'`);
 	app.setBadgeCount(count);
-}
-
-async function downloadCustomBGServiceRemoteConfig() {
-	let customBGUrl;
-	try {
-		customBGUrl = new URL('', config.customBGServiceBaseUrl);
-	}
-	catch (err) {
-		customBGUrl = new URL('', 'http://localhost');
-	}
-
-	const remotePath = httpHelper.joinURLs(customBGUrl.href, 'config.json');
-	logger.debug(`Fetching custom background configuration from '${remotePath}'`);
-	httpHelper.getAsync(remotePath)
-		.then(onCustomBGServiceConfigDownloadSuccess)
-		.catch(onCustomBGServiceConfigDownloadFailure);
-	if (config.customBGServiceConfigFetchInterval > 0) {
-		setTimeout(downloadCustomBGServiceRemoteConfig, config.customBGServiceConfigFetchInterval * 1000);
-	}
-}
-
-function onCustomBGServiceConfigDownloadSuccess(data) {
-	const downloadPath = path.join(app.getPath('userData'), 'custom_bg_remote.json');
-	try {
-		const configJSON = JSON.parse(data);
-		for (let i = 0; i < configJSON.length; i++) {
-			setPath(configJSON[i]);
-		}
-		fs.writeFileSync(downloadPath, JSON.stringify(configJSON));
-		logger.debug(`Custom background service remote configuration stored at '${downloadPath}'`);
-	}
-	catch (err) {
-		logger.error(`Failed to save remote configuration at '${downloadPath}'`);
-	}
-}
-
-/**
- * @param {{filetype: string,id: string, name: string, src: string, thumb_src: string }} cfg 
- */
-function setPath(cfg) {
-	if (!cfg.src.startsWith('/outlook-for-linux/custom-bg/')) {
-		cfg.src = httpHelper.joinURLs('/outlook-for-linux/custom-bg/', cfg.src);
-	}
-
-	if (!cfg.thumb_src.startsWith('/outlook-for-linux/custom-bg/')) {
-		cfg.thumb_src = httpHelper.joinURLs('/outlook-for-linux/custom-bg/', cfg.thumb_src);
-	}
-}
-
-function onCustomBGServiceConfigDownloadFailure(err) {
-	const dlpath = path.join(app.getPath('userData'), 'custom_bg_remote.json');
-	logger.error(err.message);
-	try {
-		fs.writeFileSync(dlpath, JSON.stringify([]));
-	}
-	catch (err) {
-		logger.error(`Failed to save remote configuration at '${dlpath}'`);
-	}
 }
