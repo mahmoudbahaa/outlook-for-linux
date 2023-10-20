@@ -10,6 +10,7 @@ const TrayIconChooser = require('../browser/tools/trayIconChooser');
 // eslint-disable-next-line no-unused-vars
 const { AppConfiguration } = require('../appConfiguration');
 const connMgr =  require('../connectionManager');
+const path = require('path');
 
 /**
  * @type {TrayIconChooser}
@@ -242,7 +243,7 @@ function createNewBrowserWindow(windowState) {
 
 		webPreferences: {
 			partition: config.partition,
-			// preload: path.join(__dirname, '..', 'browser', 'index.js'),
+			preload: path.join(__dirname, '..', 'browser', 'index.js'),
 			plugins: true,
 			contextIsolation: false,
 			sandbox: false,

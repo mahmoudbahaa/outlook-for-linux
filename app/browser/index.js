@@ -5,6 +5,7 @@
 	let config;
 	ipcRenderer.invoke('getConfig').then(mainConfig => {
 		config = mainConfig;
+		console.log('Initializing modules');
 		initializeModules(config);
 	});
 
