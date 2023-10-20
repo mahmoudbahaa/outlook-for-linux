@@ -8,7 +8,6 @@ The [zoom.js](tools/zoom.js) inject the keyboard shortcuts for zoom in the brows
 
 The notifications folder contains:
 
-*    [activityManager.js](notifications/activityManager.js) listens for changes in the chatListService and bellNotificationsService to update the unread count.
 *    [trayIconRenderer.js](tools/trayIconRenderer.js) renders a new icon with the number of unread messages.
 
 The desktopShare folder contains the logic to add basic destop sharing capabilities to the app.

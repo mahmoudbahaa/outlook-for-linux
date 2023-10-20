@@ -1,44 +1,11 @@
-/* global angular */
-(function () {
-	const { ipcRenderer } = require('electron');
-	const ActivityManager = require('./notifications/activityManager');
+(async function () {
+	const {ipcRenderer} = require('electron');
 
 	let config;
 	ipcRenderer.invoke('getConfig').then(mainConfig => {
 		config = mainConfig;
 		initializeModules(config, ipcRenderer);
-
-		new ActivityManager(ipcRenderer, config).start();
-
-		document.addEventListener('DOMContentLoaded', () => {
-			modifyAngularSettingsWithTimeout();
-		});
 	});
-
-	function disablePromoteStuff(injector) {
-		injector.get('settingsService').appConfig.promoteMobile = false;
-		injector.get('settingsService').appConfig.promoteDesktop = false;
-		injector.get('settingsService').appConfig.hideGetAppButton = true;
-		injector.get('settingsService').appConfig.enableMobileDownloadMailDialog = false;
-	}
-
-	function modifyAngularSettingsWithTimeout() {
-		setTimeout(() => {
-			try {
-				let injector = angular.element(document).injector();
-
-				if (injector) {
-					disablePromoteStuff(injector);
-
-					injector.get('settingsService').settingsService.refreshSettings();
-				}
-			} catch (error) {
-				if (error instanceof ReferenceError) {
-					modifyAngularSettingsWithTimeout();
-				}
-			}
-		}, 4000);
-	}
 
 	Object.defineProperty(navigator.serviceWorker, 'register', {
 		value: () => {
@@ -47,6 +14,7 @@
 	});
 
 	let classicNotification = window.Notification;
+
 	class CustomNotification {
 		constructor(title, options) {
 			if (config.disableNotifications) {
@@ -65,6 +33,7 @@
 			console.log('Continues to default notification workflow');
 			return new classicNotification(title, options);
 		}
+
 		static requestPermission(callback) {
 			if (typeof (callback) == 'function') {
 				callback('granted');
@@ -75,18 +44,17 @@
 			return 'granted';
 		}
 	}
+
 	window.Notification = CustomNotification;
 }());
 
 /**
  * @param {object} config 
- * @param {Electron.IpcRenderer} ipcRenderer 
+ * @param {Electron.IpcRenderer} ipcRenderer
  */
 function initializeModules(config, ipcRenderer) {
 	require('./tools/zoom').init(config);
 	require('./tools/shortcuts').init(config);
-	require('./tools/chromeApi')(config);
 	require('./tools/settings').init(config, ipcRenderer);
-	require('./tools/customBackgrounds')(config, ipcRenderer);
 }
 

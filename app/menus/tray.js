@@ -1,4 +1,4 @@
-const { Tray, Menu, ipcMain, nativeImage } = require('electron');
+const { Tray, Menu } = require('electron');
 
 class ApplicationTray {
 	constructor(window, appMenu, iconPath) {
@@ -13,20 +13,11 @@ class ApplicationTray {
 		this.tray.setToolTip('Microsoft Outlook');
 		this.tray.on('click', () => this.showAndFocusWindow());
 		this.tray.setContextMenu(Menu.buildFromTemplate(this.appMenu));
-
-		ipcMain.on('tray-update', (event, { icon, flash }) => this.updateTrayImage(icon, flash));
 	}
 
 	showAndFocusWindow() {
 		this.window.show();
 		this.window.focus();
-	}
-
-	updateTrayImage(iconUrl, flash) {
-		const image = nativeImage.createFromDataURL(iconUrl);
-
-		this.tray.setImage(image);
-		this.window.flashFrame(flash);
 	}
 
 	close() {

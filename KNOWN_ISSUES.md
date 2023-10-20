@@ -21,16 +21,6 @@ The following is a list of locations depending on your type installation:
 | --user installed flatpak | `~/.var/app/com.github.mahmoudbahaa.outlook_for_linux/config/outlook-for-linux` | `rm -rf ~/.var/app/com.github.IsmaelMartinez.outlook_for_linux/config/outlook-for-linux` |
 | From source |                              `~/.config/Electron/`                              | `rm -rf ~/.config/Electron/` |
 
-## Spellchecker not working
-
-Details are in issue [#28](https://github.com/IsmaelMartinez/teams-for-linux/issues/28)
-
-In short, node_spellchecker only ships with en_US dictionary.
-
-As a work around, you can enable the use of local dictionaries by installing hunspell and your locale dictionary as indicates in this link [https://github.com/atom/spell-check#debian-ubuntu-and-mint](https://github.com/atom/spell-check#debian-ubuntu-and-mint)
-
-Also check [#154](https://github.com/IsmaelMartinez/teams-for-linux/issues/154) in case you have an issue with the detection of the locale.
-
 ## No desktop notifications
 
 Some notifications daemons in linux don't support the implementation that Microsoft implemented in the browser.
